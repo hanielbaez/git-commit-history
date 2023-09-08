@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { GitCommit } from './github.interfaces';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com/';
 
 @Injectable()
 export class GithubService {
-  async fetchCommitHistory(owner: string, repo: string) {
+  async fetchCommitHistory(owner: string, repo: string): Promise<GitCommit[]> {
     try {
       const response = await axios.get(
         `${GITHUB_API_BASE_URL}repos/${owner}/${repo}/commits`,
