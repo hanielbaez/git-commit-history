@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { GithubService } from './github.service';
-import { GitCommit } from './github.interfaces';
+import { GitCommitDto } from './dtos/github.dto';
 import { FindAllCommitsDto } from './github.dto';
 
 @Controller('github')
@@ -10,7 +10,7 @@ export class GithubController {
   @Get('owners/:owner/repos/:repository')
   async findAllCommits(
     @Param() { owner, repository }: FindAllCommitsDto,
-  ): Promise<GitCommit[]> {
+  ): Promise<GitCommitDto[]> {
     return await this.githubService.fetchCommitHistory(owner, repository);
   }
 }

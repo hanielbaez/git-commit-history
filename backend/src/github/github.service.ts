@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import axios, { HttpStatusCode } from 'axios';
 
-import { GitCommit } from './github.interfaces';
+import { GitCommitDto } from './dtos/github.dto';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com/';
 
@@ -15,7 +15,7 @@ export class GithubService {
   async fetchCommitHistory(
     owner: string,
     repository: string,
-  ): Promise<GitCommit[]> {
+  ): Promise<GitCommitDto[]> {
     try {
       const response = await axios.get(
         `${GITHUB_API_BASE_URL}repos/${owner}/${repository}/commits`,
