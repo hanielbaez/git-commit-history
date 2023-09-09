@@ -35,7 +35,15 @@ describe('GithubService', () => {
     });
 
     it('should handle API request error', async () => {
-      jest.spyOn(axios, 'get').mockRejectedValue(new Error('API Error'));
+      const errorMessage = 'API Error';
+      const customError = new Error(errorMessage);
+      (customError as any).response = {
+        status: 500,
+        data: {
+          message: 'Internal Server Error',
+        },
+      };
+      jest.spyOn(axios, 'get').mockRejectedValue(customError);
 
       const owner = 'owner';
       const repo = 'repo';
