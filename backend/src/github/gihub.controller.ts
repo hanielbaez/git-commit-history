@@ -1,9 +1,11 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { GithubService } from './github.service';
 import { GitCommitDto } from './dtos/github.dto';
-import { FindAllCommitsDto } from './github.dto';
+import { FindAllCommitsDto } from './dtos/param.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('github')
+@ApiTags('Github')
 export class GithubController {
   constructor(private githubService: GithubService) {}
 
