@@ -1,6 +1,8 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 
 import { HeaderCustom, TITLE } from "../../components/header";
+import { Container, Flex } from "@mantine/core";
+import { SearchInput } from "../../components/search-intpu";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -14,5 +16,12 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export default function Index() {
-  return <HeaderCustom />;
+  return (
+    <Flex align="center" direction="column">
+      <HeaderCustom />
+      <Container>
+        <SearchInput />
+      </Container>
+    </Flex>
+  );
 }
