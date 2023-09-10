@@ -4,6 +4,11 @@ export const CommitSchema = z.object({
   sha: z.string(),
   node_id: z.string(),
   commit: z.object({
+    author: z.object({
+      name: z.string(),
+      email: z.string().email(),
+      date: z.string().datetime(),
+    }),
     message: z.string(),
     url: z.string().url(),
     comment_count: z.number(),
