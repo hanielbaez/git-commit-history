@@ -24,7 +24,6 @@ export function HeaderCustom() {
           </Highlight>
         </div>
         <Stack justify="center" align="baseline"></Stack>
-
         <ColorToggle />
       </Group>
     </Header>
