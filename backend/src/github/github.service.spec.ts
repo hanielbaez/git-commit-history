@@ -61,4 +61,24 @@ describe('GithubService', () => {
       ).rejects.toThrowError('Failed to fetch commit history from GitHub API');
     });
   });
+
+  describe('fetchCommitPatch', () => {
+    it('should return commit history', async () => {
+      const mockResponse = { files: [{ patch: '<p>Hola mundo</p>' }] };
+      jest
+        .spyOn(axiosService.axiosConfig, 'get')
+        .mockResolvedValue({ data: mockResponse } as any);
+
+      const owner = 'owner';
+      const repo = 'repo';
+      const sha = '1234';
+      const result = await githubService.fetchCommitPatch(owner, repo, sha);
+
+      expect(result).toEqual(mockResponse.files[0].patch);
+
+      expect(axiosService.axiosConfig.get).toHaveBeenCalledWith(
+        `repos/${owner}/${repo}/commits/${sha}`,
+      );
+    });
+  });
 });
