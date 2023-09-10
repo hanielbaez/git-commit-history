@@ -1,4 +1,4 @@
-import { rem, Header, Group, Highlight, Stack } from "@mantine/core";
+import { rem, Header, Group, Highlight, Stack, Text } from "@mantine/core";
 import { ColorToggle } from "./color-toggle";
 
 const HEADER_HEIGHT = rem(60);
@@ -24,7 +24,20 @@ export function HeaderCustom() {
           </Highlight>
         </div>
         <Stack justify="center" align="baseline"></Stack>
-        <ColorToggle />
+        <Group>
+          <a
+            href="http://localhost:3000/api"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              textDecoration: "none",
+              color: "#FFFFFF",
+            }}
+          >
+            <Text size="sm">API Documentation</Text>
+          </a>
+          <ColorToggle />
+        </Group>
       </Group>
     </Header>
   );
