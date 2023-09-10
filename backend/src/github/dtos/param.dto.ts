@@ -9,3 +9,9 @@ export class FindAllCommitsDto {
   @IsString()
   repository: string;
 }
+
+export class GetFirstCommitsSHADto extends FindAllCommitsDto {
+  @IsNotEmpty()
+  @IsString()
+  sha: string;
+}
