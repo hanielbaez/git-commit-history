@@ -46,7 +46,7 @@ export class GithubService {
         `repos/${owner}/${repository}/commits/${sha}`,
       );
 
-      return response.data.files[0]?.patch;
+      return { patch: response.data.files[0]?.patch };
     } catch (error) {
       if (error.response.status === HttpStatusCode.NotFound) {
         throw new NotFoundException(
