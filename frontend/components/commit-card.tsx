@@ -47,7 +47,15 @@ export default function CommitCard({
         <ButtonCopy value={sha} />
       </Group>
       <Highlighter code={codeChanged} />
-      <a href={html_url} target="_blank" rel="noopener noreferrer">
+      <a
+        href={html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          textDecoration: "none",
+          color: "#FFFFFF",
+        }}
+      >
         <Text size="sm" color="blue">
           View on GitHub
         </Text>
