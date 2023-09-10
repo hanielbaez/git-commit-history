@@ -1,8 +1,10 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import { type LoaderArgs, type V2_MetaFunction } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import { Flex, Text } from "@mantine/core";
 
 import { HeaderCustom, TITLE } from "../../components/header";
-import { Container, Flex } from "@mantine/core";
 import { SearchInput } from "../../components/search-intpu";
+import { fetchCommits } from "../server/github.server";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -15,13 +17,34 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
+export async function loader({ request }: LoaderArgs) {
+  const urL = new URL(request.url);
+  const searchQuery = urL.searchParams.get("search");
+
+  if (!searchQuery) return { commits: null };
+
+  const commits = await fetchCommits(searchQuery);
+
+  return { commits };
+}
+
 export default function Index() {
+  const { commits } = useLoaderData<typeof loader>();
+
   return (
-    <Flex align="center" direction="column">
+    <Flex direction="column">
       <HeaderCustom />
-      <Container>
+      <Form method="post">
         <SearchInput />
-      </Container>
+      </Form>
+      {!commits?.length ? (
+        <Text>
+          Sorry, the repository could not be found. Please double-check the
+          repository URL and try again
+        </Text>
+      ) : (
+        <Text>{JSON.stringify(commits)}</Text>
+      )}
     </Flex>
   );
 }
