@@ -4,22 +4,23 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import axios, { HttpStatusCode } from 'axios';
+import { HttpStatusCode } from 'axios';
 
 import { GitCommitDto } from './dtos/git-commit.dto';
 import { CommitSHADto } from './dtos/commit-sha.dto';
-
-const GITHUB_API_BASE_URL = 'https://api.github.com/';
+import { AxiosService } from '../axios/axios.service';
 
 @Injectable()
 export class GithubService {
+  constructor(private readonly axiosService: AxiosService) {}
+
   async fetchCommitHistory(
     owner: string,
     repository: string,
   ): Promise<GitCommitDto[]> {
     try {
-      const response = await axios.get(
-        `${GITHUB_API_BASE_URL}repos/${owner}/${repository}/commits`,
+      const response = await this.axiosService.axiosConfig.get(
+        `repos/${owner}/${repository}/commits`,
       );
       return response.data;
     } catch (error) {
@@ -41,8 +42,8 @@ export class GithubService {
     sha: string,
   ): Promise<CommitSHADto | null> {
     try {
-      const response = await axios.get(
-        `${GITHUB_API_BASE_URL}repos/${owner}/${repository}/commits/${sha}`,
+      const response = await this.axiosService.axiosConfig.get(
+        `repos/${owner}/${repository}/commits/${sha}`,
       );
 
       return response.data.files[0]?.patch;
