@@ -8,7 +8,7 @@ export type CommitList = z.infer<typeof CommitListSchema>;
 
 export const fetchCommits = async (
   searchQuery: string
-): Promise<CommitList | null> => {
+): Promise<CommitList | null | []> => {
   const userInfo = extractUserInfoFromGitHubUrl(searchQuery);
 
   if (!userInfo?.username || !userInfo?.repository) {
@@ -38,7 +38,7 @@ export const fetchCommits = async (
     return CommitListSchema.parse(json);
   } catch (error) {
     console.error("Error fetching commits", error);
-    return null;
+    return [];
   }
 };
 

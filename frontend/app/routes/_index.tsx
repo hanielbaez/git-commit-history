@@ -5,7 +5,7 @@ import {
   type V2_MetaFunction,
 } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import { Flex, Text } from "@mantine/core";
+import { Container, Flex, Text } from "@mantine/core";
 
 import { HeaderCustom, TITLE } from "../../components/header";
 import { SearchInput } from "../../components/search-intpu";
@@ -66,11 +66,15 @@ export default function Index() {
       <Form method="post">
         <SearchInput />
       </Form>
-      {!commits?.length ? (
-        <Text>
-          Sorry, the repository could not be found. Please double-check the
-          repository URL and try again
-        </Text>
+      {!commits ? (
+        <></>
+      ) : !commits?.length ? (
+        <Container mt={200}>
+          <Text>
+            Sorry, the repository could not be found. Please double-check the
+            repository URL and try again
+          </Text>
+        </Container>
       ) : (
         <Text>
           {
