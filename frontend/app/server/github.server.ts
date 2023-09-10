@@ -41,3 +41,40 @@ export const fetchCommits = async (
     return null;
   }
 };
+
+export const fetchCommitSHA = async (
+  searchQuery: string,
+  sha: string
+): Promise<CommitList | null> => {
+  const userInfo = extractUserInfoFromGitHubUrl(searchQuery);
+
+  if (!userInfo?.username || !userInfo?.repository || sha) {
+    console.error("Invalid username, repository or SHA");
+    return null;
+  }
+
+  const url = new URL(
+    `${process.env.API}/github/owners/${userInfo.username}/repos/${userInfo.repository}/commits/${sha}`
+  );
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Request failed with status: ${response.status} and body: ${response.body}`
+      );
+    }
+
+    const json = await response.json();
+    return CommitListSchema.parse(json);
+  } catch (error) {
+    console.error("Error fetching commits sha", error);
+    return null;
+  }
+};
