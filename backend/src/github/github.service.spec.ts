@@ -1,17 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import axios from 'axios';
 
 import { GithubService } from './github.service';
+import { AxiosModule } from '../axios/axios.module';
+import { AxiosService } from '../axios/axios.service';
 
 describe('GithubService', () => {
   let githubService: GithubService;
+  let axiosService: AxiosService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [AxiosModule],
       providers: [GithubService],
     }).compile();
 
     githubService = module.get<GithubService>(GithubService);
+    axiosService = module.get<AxiosService>(AxiosService);
   });
 
   it('should be defined', () => {
@@ -21,7 +25,9 @@ describe('GithubService', () => {
   describe('fetchCommitHistory', () => {
     it('should return commit history', async () => {
       const mockResponse = [{ commit: { message: 'Test commit' } }];
-      jest.spyOn(axios, 'get').mockResolvedValue({ data: mockResponse } as any);
+      jest
+        .spyOn(axiosService.axiosConfig, 'get')
+        .mockResolvedValue({ data: mockResponse } as any);
 
       const owner = 'owner';
       const repo = 'repo';
@@ -29,8 +35,8 @@ describe('GithubService', () => {
 
       expect(result).toEqual(mockResponse);
 
-      expect(axios.get).toHaveBeenCalledWith(
-        `https://api.github.com/repos/${owner}/${repo}/commits`,
+      expect(axiosService.axiosConfig.get).toHaveBeenCalledWith(
+        `repos/${owner}/${repo}/commits`,
       );
     });
 
@@ -43,7 +49,9 @@ describe('GithubService', () => {
           message: 'Internal Server Error',
         },
       };
-      jest.spyOn(axios, 'get').mockRejectedValue(customError);
+      jest
+        .spyOn(axiosService.axiosConfig, 'get')
+        .mockRejectedValue(customError);
 
       const owner = 'owner';
       const repo = 'repo';
