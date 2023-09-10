@@ -45,10 +45,10 @@ export const fetchCommits = async (
 export const fetchCommitSHA = async (
   searchQuery: string,
   sha: string
-): Promise<CommitList | null> => {
+): Promise<string | null> => {
   const userInfo = extractUserInfoFromGitHubUrl(searchQuery);
 
-  if (!userInfo?.username || !userInfo?.repository || sha) {
+  if (!userInfo?.username || !userInfo?.repository || !sha) {
     console.error("Invalid username, repository or SHA");
     return null;
   }
@@ -71,8 +71,8 @@ export const fetchCommitSHA = async (
       );
     }
 
-    const json = await response.json();
-    return CommitListSchema.parse(json);
+    const { patch } = await response.json();
+    return patch;
   } catch (error) {
     console.error("Error fetching commits sha", error);
     return null;

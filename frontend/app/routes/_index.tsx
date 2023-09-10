@@ -1,10 +1,15 @@
-import { type LoaderArgs, type V2_MetaFunction } from "@remix-run/node";
+import {
+  type ActionArgs,
+  redirect,
+  type LoaderArgs,
+  type V2_MetaFunction,
+} from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { Flex, Text } from "@mantine/core";
 
 import { HeaderCustom, TITLE } from "../../components/header";
 import { SearchInput } from "../../components/search-intpu";
-import { fetchCommits } from "../server/github.server";
+import { fetchCommitSHA, fetchCommits } from "../server/github.server";
 import CommitCard from "../../components/commit-card";
 
 export const meta: V2_MetaFunction = () => {
@@ -19,18 +24,41 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderArgs) {
-  const urL = new URL(request.url);
-  const searchQuery = urL.searchParams.get("search");
+  try {
+    const urL = new URL(request.url);
+    const searchQuery = urL.searchParams.get("search");
 
-  if (!searchQuery) return { commits: null };
+    if (!searchQuery) return { commits: null, codeChanged: null };
 
-  const commits = await fetchCommits(searchQuery);
+    const commits = await fetchCommits(searchQuery);
 
-  return { commits };
+    if (!commits) {
+      throw new Error("Failed to fetch commits.");
+    }
+
+    const promises = commits.map((commit) =>
+      fetchCommitSHA(searchQuery, commit.sha)
+    );
+
+    const codeChanged = await Promise.all(promises);
+
+    return { commits, codeChanged };
+  } catch (error) {
+    console.error(error);
+    return { commits: null, codeChanged: null };
+  }
+}
+
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+
+  const values = Object.fromEntries(formData);
+
+  return redirect(`?search=${values?.search}`);
 }
 
 export default function Index() {
-  const { commits } = useLoaderData<typeof loader>();
+  const { commits, codeChanged } = useLoaderData<typeof loader>();
 
   return (
     <Flex direction="column">
@@ -49,7 +77,10 @@ export default function Index() {
             <ul style={{ listStyleType: "none", padding: 0 }}>
               {commits.map((commit, index) => (
                 <li key={commit.sha || index}>
-                  <CommitCard commit={commit} />
+                  <CommitCard
+                    commit={commit}
+                    codeChanged={codeChanged[index] ?? ""}
+                  />
                 </li>
               ))}
             </ul>

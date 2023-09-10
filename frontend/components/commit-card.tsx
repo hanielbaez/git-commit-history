@@ -1,8 +1,15 @@
-import React from "react";
 import { Card, Text, Paper, Avatar } from "@mantine/core";
-import { type Commit } from "../app/server/github.server";
 
-export default function CommitCard({ commit }: { commit: Commit }) {
+import { type Commit } from "../app/server/github.server";
+import Highlighter from "./high-lighter";
+
+export default function CommitCard({
+  commit,
+  codeChanged,
+}: {
+  commit: Commit;
+  codeChanged: string;
+}) {
   const {
     sha,
     commit: {
@@ -39,6 +46,7 @@ export default function CommitCard({ commit }: { commit: Commit }) {
           {sha}
         </Text>
       </Paper>
+      <Highlighter code={codeChanged} />
       <a href={html_url} target="_blank" rel="noopener noreferrer">
         <Text size="sm" color="blue">
           View on GitHub
