@@ -1,8 +1,9 @@
 import type { z } from "zod";
 
-import { CommitListSchema } from "../schema/commit.schema";
+import { CommitListSchema, type CommitSchema } from "../schema/commit.schema";
 import extractUserInfoFromGitHubUrl from "./extract-user-info-from-github-url.server";
 
+export type Commit = z.infer<typeof CommitSchema>;
 export type CommitList = z.infer<typeof CommitListSchema>;
 
 export const fetchCommits = async (

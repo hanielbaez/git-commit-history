@@ -5,6 +5,7 @@ import { Flex, Text } from "@mantine/core";
 import { HeaderCustom, TITLE } from "../../components/header";
 import { SearchInput } from "../../components/search-intpu";
 import { fetchCommits } from "../server/github.server";
+import CommitCard from "../../components/commit-card";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -43,7 +44,17 @@ export default function Index() {
           repository URL and try again
         </Text>
       ) : (
-        <Text>{JSON.stringify(commits)}</Text>
+        <Text>
+          {
+            <ul style={{ listStyleType: "none", padding: 0 }}>
+              {commits.map((commit, index) => (
+                <li key={commit.sha || index}>
+                  <CommitCard commit={commit} />
+                </li>
+              ))}
+            </ul>
+          }
+        </Text>
       )}
     </Flex>
   );
