@@ -1,3 +1,3 @@
 export class CommitSHADto {
-  sha: string;
+  patch: string;
 }
