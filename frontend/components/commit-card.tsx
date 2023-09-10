@@ -1,7 +1,8 @@
-import { Card, Text, Paper, Avatar } from "@mantine/core";
+import { Card, Text, Avatar, Input, Group } from "@mantine/core";
 
 import { type Commit } from "../app/server/github.server";
 import Highlighter from "./high-lighter";
+import ButtonCopy from "./button-copy";
 
 export default function CommitCard({
   commit,
@@ -33,7 +34,7 @@ export default function CommitCard({
           <Text size="xl" weight={700} style={{ marginBottom: "0.5rem" }}>
             {name}
           </Text>
-          <Text size="sm" color="gray">
+          <Text size="sm" color="dimmed">
             {email}
           </Text>
         </div>
@@ -41,11 +42,10 @@ export default function CommitCard({
       <Text size="lg" weight={700} style={{ marginBottom: "1rem" }}>
         {message}
       </Text>
-      <Paper p="sm" style={{ marginBottom: "1rem" }}>
-        <Text size="sm" color="gray">
-          {sha}
-        </Text>
-      </Paper>
+      <Group>
+        <Input value={sha} readOnly />
+        <ButtonCopy value={sha} />
+      </Group>
       <Highlighter code={codeChanged} />
       <a href={html_url} target="_blank" rel="noopener noreferrer">
         <Text size="sm" color="blue">
