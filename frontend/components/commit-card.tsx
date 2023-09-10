@@ -10,6 +10,7 @@ export default function CommitCard({ commit }: { commit: Commit }) {
       author: { name, email },
     },
     html_url,
+    committer,
   } = commit;
 
   return (
@@ -18,7 +19,7 @@ export default function CommitCard({ commit }: { commit: Commit }) {
         style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}
       >
         <Avatar
-          src={`https://avatars.githubusercontent.com/u/${23202818}`}
+          src={`https://avatars.githubusercontent.com/u/${committer.id}`}
           size="lg"
         />
         <div style={{ marginLeft: "1rem" }}>
