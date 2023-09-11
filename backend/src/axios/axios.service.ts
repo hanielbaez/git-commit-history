@@ -11,15 +11,19 @@ export class AxiosService {
 
   constructor(private readonly configurationService: ConfigService) {
     if (!this.githubToken) {
-      throw new Error('GITHUB_TOKEN is not set in the environment.');
+      console.warn('GITHUB_TOKEN is not set in the environment.');
     }
 
     this.axiosConfig = axios.create({
       baseURL: GITHUB_API_BASE_URL,
       timeout: 1000,
-      headers: {
-        Authorization: 'Bearer ' + this.githubToken,
-      },
+      ...(this.githubToken
+        ? {
+            headers: {
+              Authorization: 'Bearer ' + this.githubToken,
+            },
+          }
+        : {}),
     });
   }
 }
