@@ -20,6 +20,10 @@ The project consists of a backend built with Nest.js and a frontend built with R
 
 - [API Swagger Documentation](#api-swagger-documentation)
 
+- [Docker](#docker)
+
+- [Important Note about GitHub API Limit](#important-note-about-gtHub-api-limit)
+
 ---
 
 ## Getting the App from Github
