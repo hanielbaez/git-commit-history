@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { HttpStatusCode } from 'axios';
 
@@ -27,6 +28,11 @@ export class GithubService {
       if (error.response?.status === HttpStatusCode.NotFound) {
         throw new NotFoundException(
           `No commits found for user ${owner}'s repository ${repository}. Please check the repository name and try again.`,
+        );
+      } else if (error.response?.status === HttpStatus.UNAUTHORIZED) {
+        throw new UnauthorizedException(
+          'It looks like you are using a wrong Github token, please verify it and try again',
+          error,
         );
       }
       throw new HttpException(
