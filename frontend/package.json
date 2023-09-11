@@ -4,7 +4,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "PORT=3003 remix dev",
-    "start": "remix-serve build",
+    "start": "npm run build && PORT=3003 remix-serve build",
     "typecheck": "tsc",
     "test": "jest"
   },
