@@ -16,7 +16,6 @@ export class AxiosService {
 
     this.axiosConfig = axios.create({
       baseURL: GITHUB_API_BASE_URL,
-      timeout: 1000,
       ...(this.githubToken
         ? {
             headers: {
