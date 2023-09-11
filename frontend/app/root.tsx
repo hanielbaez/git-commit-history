@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  type V2_MetaFunction,
 } from "@remix-run/react";
 import {
   type ColorScheme,
@@ -14,6 +15,12 @@ import {
 } from "@mantine/core";
 import { StylesPlaceholder } from "@mantine/remix";
 import { useState } from "react";
+
+export const meta: V2_MetaFunction = () => [
+  { charSet: "utf-8" },
+  { title: "Git Commit History" },
+  { name: "viewport", content: "width=device-width,initial-scale=1" },
+];
 
 createEmotionCache({ key: "mantine" });
 
