@@ -121,6 +121,47 @@ $ npm run test`
 ```
 
 ## API Swagger Documentation
+
 Once the backend is running, Swagger documentation is available at:
 
 http://localhost:3000/api
+
+## Docker
+
+Verify that Docker is installed correctly and running, you can run the following command:
+
+```bash
+$ docker --version
+```
+
+Create a network
+
+```bash
+$ docker network create git-network --driver bridge
+```
+
+Build the Docker image for the backend:
+
+```bash
+$ docker build -t git-commit-backend -f backend.dockerfile ./backend
+```
+
+Run the Docker container, mapping port 3000 on your local machine to port 3000 in the container:
+
+```bash
+$ docker run -d --name git-commit-backend-container --network git-network -p 3000:3000 git-commit-backend
+```
+
+### Frontend
+
+Build the Docker image for the frontend:
+
+```bash
+$ docker build -t git-commit-frontend -f frontend.dockerfile ./frontend
+```
+
+Run the Docker container, mapping port 3003 on your local machine to port 3003 in the container:
+
+```bash
+$ docker run --name git-commit-frontend-container --network git-network -p 3003:3003 -e API=http://git-commit-backend-container:3000 git-commit-frontend
+```
