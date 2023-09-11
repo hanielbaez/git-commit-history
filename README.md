@@ -119,3 +119,8 @@ Unit tests for the frontend have been implemented. To execute, go to the fronten
 $ cd frontend
 $ npm run test`
 ```
+
+## API Swagger Documentation
+Once the backend is running, Swagger documentation is available at:
+
+http://localhost:3000/api
