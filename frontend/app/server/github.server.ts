@@ -3,6 +3,8 @@ import type { z } from "zod";
 import { CommitListSchema, type CommitSchema } from "../schema/commit.schema";
 import extractUserInfoFromGitHubUrl from "./extract-user-info-from-github-url.server";
 
+const BASE_URL = process.env.API ?? "http://localhost:3000";
+
 export type Commit = z.infer<typeof CommitSchema>;
 export type CommitList = z.infer<typeof CommitListSchema>;
 
@@ -17,7 +19,7 @@ export const fetchCommits = async (
   }
 
   const url = new URL(
-    `${process.env.API}/github/owners/${userInfo.username}/repos/${userInfo.repository}`
+    `${BASE_URL}/github/owners/${userInfo.username}/repos/${userInfo.repository}`
   );
 
   try {
@@ -54,7 +56,7 @@ export const fetchCommitSHA = async (
   }
 
   const url = new URL(
-    `${process.env.API}/github/owners/${userInfo.username}/repos/${userInfo.repository}/commits/${sha}`
+    `${BASE_URL}/github/owners/${userInfo.username}/repos/${userInfo.repository}/commits/${sha}`
   );
 
   try {
