@@ -24,7 +24,7 @@ export class GithubService {
       );
       return response.data;
     } catch (error) {
-      if (error.response.status === HttpStatusCode.NotFound) {
+      if (error.response?.status === HttpStatusCode.NotFound) {
         throw new NotFoundException(
           `No commits found for user ${owner}'s repository ${repository}. Please check the repository name and try again.`,
         );
@@ -32,6 +32,7 @@ export class GithubService {
       throw new HttpException(
         'Failed to fetch commit history from GitHub API',
         HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
       );
     }
   }
@@ -48,7 +49,7 @@ export class GithubService {
 
       return { patch: response.data.files[0]?.patch };
     } catch (error) {
-      if (error.response.status === HttpStatusCode.NotFound) {
+      if (error.response?.status === HttpStatusCode.NotFound) {
         throw new NotFoundException(
           `No commits found for user ${owner}'s repository ${repository}. Please check the repository name and try again.`,
         );
@@ -56,6 +57,7 @@ export class GithubService {
       throw new HttpException(
         "Failed to fetch commit's pathc from GitHub API",
         HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
       );
     }
   }
