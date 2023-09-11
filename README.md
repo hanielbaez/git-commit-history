@@ -165,3 +165,23 @@ Run the Docker container, mapping port 3003 on your local machine to port 3003 i
 ```bash
 $ docker run --name git-commit-frontend-container --network git-network -p 3003:3003 -e API=http://git-commit-backend-container:3000 git-commit-frontend
 ```
+
+## Important Note about GitHub API Limit
+
+Please be aware that the GitHub API has rate limits for unauthenticated API calls. If you plan to use or test this application extensively, we recommend generating a personal GitHub token.
+
+### Steps to Generate GitHub Token
+
+1. Go to your GitHub account settings.
+2. Navigate to the "Developer settings" section.
+3. Click on "Personal access tokens" and then "Generate new token."
+4. Give the token a name, select the required permissions (generally 'repo' and 'read:user' should suffice for this app), and generate the token.
+5. Copy the generated token.
+
+### Using the Token in the Application
+
+Save the generated token in a `.env` file under the `backend` subfolder with the following format:
+
+`GITHUB_TOKEN=your_generated_token_here`
+
+This will allow the application to make authenticated GitHub API calls.
