@@ -63,34 +63,36 @@ export default function Index() {
   return (
     <Flex direction="column">
       <HeaderCustom />
-      <Form method="post">
-        <SearchInput />
-      </Form>
-      {!commits ? (
-        <></>
-      ) : !commits?.length ? (
-        <Container mt={200}>
+      <Container>
+        <Form method="post">
+          <SearchInput />
+        </Form>
+        {!commits ? (
+          <></>
+        ) : !commits?.length ? (
+          <Container mt={200}>
+            <Text>
+              Sorry, the repository could not be found. Please double-check the
+              repository URL and try again
+            </Text>
+          </Container>
+        ) : (
           <Text>
-            Sorry, the repository could not be found. Please double-check the
-            repository URL and try again
+            {
+              <ul style={{ listStyleType: "none", padding: 0 }}>
+                {commits.map((commit, index) => (
+                  <li key={commit.sha || index}>
+                    <CommitCard
+                      commit={commit}
+                      codeChanged={codeChanged[index] ?? ""}
+                    />
+                  </li>
+                ))}
+              </ul>
+            }
           </Text>
-        </Container>
-      ) : (
-        <Text>
-          {
-            <ul style={{ listStyleType: "none", padding: 0 }}>
-              {commits.map((commit, index) => (
-                <li key={commit.sha || index}>
-                  <CommitCard
-                    commit={commit}
-                    codeChanged={codeChanged[index] ?? ""}
-                  />
-                </li>
-              ))}
-            </ul>
-          }
-        </Text>
-      )}
+        )}
+      </Container>
     </Flex>
   );
 }
