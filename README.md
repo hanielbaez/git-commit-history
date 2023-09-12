@@ -2,6 +2,10 @@
 
 **By:** Haniel Baez
 
+<p align="center">
+  <img src="https://github.com/hanielbaez/git-commit-history/screenshot.png" alt="Git Commit History" width="600">
+</p>
+
 ## Description
 
 This app displays the commit history of a public GitHub repository. You can use the search bar to view commit history for any public GitHub repository.
