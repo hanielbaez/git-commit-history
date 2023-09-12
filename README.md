@@ -3,7 +3,7 @@
 **By:** Haniel Baez
 
 <p align="center">
-  <img src="https://github.com/hanielbaez/git-commit-history/blob/backend/screenshot.png alt="Git Commit History" width="600">
+  <img src="https://github.com/hanielbaez/git-commit-history/blob/backend/screenshot.png" alt="Git Commit History" width="600">
 </p>
 
 ## Description
