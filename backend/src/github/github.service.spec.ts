@@ -74,7 +74,7 @@ describe('GithubService', () => {
       const sha = '1234';
       const result = await githubService.fetchCommitPatch(owner, repo, sha);
 
-      expect(result).toEqual(mockResponse.files[0].patch);
+      expect(result).toEqual(mockResponse.files[0]);
 
       expect(axiosService.axiosConfig.get).toHaveBeenCalledWith(
         `repos/${owner}/${repo}/commits/${sha}`,
