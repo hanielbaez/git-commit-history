@@ -144,10 +144,12 @@ Create a network
 $ docker network create git-network --driver bridge
 ```
 
+\*Note: The commands below must be executed from the project's root directory
+
 Build the Docker image for the backend:
 
 ```bash
-$ docker build -t git-commit-backend -f backend.dockerfile ./backend
+$ docker build -t git-commit-backend -f ./backend/backend.dockerfile ./backend
 ```
 
 Run the Docker container, mapping port 3000 on your local machine to port 3000 in the container:
@@ -161,7 +163,7 @@ $ docker run -d --name git-commit-backend-container --network git-network -p 300
 Build the Docker image for the frontend:
 
 ```bash
-$ docker build -t git-commit-frontend -f frontend.dockerfile ./frontend
+$ docker build -t git-commit-frontend -f ./frontend/frontend.dockerfile ./frontend
 ```
 
 Run the Docker container, mapping port 3003 on your local machine to port 3003 in the container:
