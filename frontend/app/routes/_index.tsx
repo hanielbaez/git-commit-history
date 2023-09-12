@@ -63,7 +63,7 @@ export default function Index() {
   return (
     <Flex direction="column">
       <HeaderCustom />
-      <Container>
+      <Container w={1000}>
         <Form method="post">
           <SearchInput />
         </Form>
@@ -71,7 +71,7 @@ export default function Index() {
           <></>
         ) : !commits?.length ? (
           <Container mt={200}>
-            <Text>
+            <Text align="center">
               Sorry, the repository could not be found. Please double-check the
               repository URL and try again
             </Text>
