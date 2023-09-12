@@ -1,5 +1,4 @@
-import { Request } from "@remix-run/node";
-import { loader, action } from "../routes/_index";
+import { loader } from "../routes/_index";
 
 import * as githubServer from "../server/github.server";
 
@@ -50,7 +49,9 @@ describe("Loader Function", () => {
   const mockCodeChanged = { sha: "<p>Hola mundo</p>" };
 
   beforeAll(() => {
-    jest.spyOn(githubServer, "fetchCommits").mockResolvedValue([mockCommit]);
+    jest
+      .spyOn(githubServer, "fetchCommits")
+      .mockResolvedValue({ commits: [mockCommit], statusCode: 200 });
     jest
       .spyOn(githubServer, "fetchCommitSHA")
       .mockResolvedValue(mockCodeChanged.sha);
@@ -70,17 +71,22 @@ describe("Loader Function", () => {
     expect(result).toEqual({
       codeChanged: [mockCodeChanged.sha],
       commits: [mockCommit],
+      statusCode: 200,
     });
   });
 
-  it("should return null commits and codeChanged when searchQuery is not provided", async () => {
+  it("should return null commits, codeChanged and statusCode 400 when searchQuery is not provided", async () => {
     const argument = {
       request: { url: "http://haniel.com/" },
     } as any;
 
     const result = await loader(argument);
 
-    expect(result).toEqual({ commits: null, codeChanged: null });
+    expect(result).toEqual({
+      commits: null,
+      codeChanged: null,
+      statusCode: 400,
+    });
   });
 
   it("should handle errors and return null commits and codeChanged", async () => {
@@ -94,6 +100,10 @@ describe("Loader Function", () => {
 
     const result = await loader(argument);
 
-    expect(result).toEqual({ commits: null, codeChanged: null });
+    expect(result).toEqual({
+      commits: null,
+      codeChanged: null,
+      statusCode: 500,
+    });
   });
 });
