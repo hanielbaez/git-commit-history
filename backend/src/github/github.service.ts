@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -34,6 +35,8 @@ export class GithubService {
           'It looks like you are using a wrong Github token, please verify it and try again',
           error,
         );
+      } else if (error.response?.status === HttpStatus.FORBIDDEN) {
+        throw new ForbiddenException(error.response?.data, error);
       }
       throw new HttpException(
         'Failed to fetch commit history from GitHub API',

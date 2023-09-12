@@ -10,12 +10,12 @@ export type CommitList = z.infer<typeof CommitListSchema>;
 
 export const fetchCommits = async (
   searchQuery: string
-): Promise<CommitList | null | []> => {
+): Promise<{ commits: CommitList; statusCode: number }> => {
   const userInfo = extractUserInfoFromGitHubUrl(searchQuery);
 
   if (!userInfo?.username || !userInfo?.repository) {
     console.error("Invalid username or repository");
-    return null;
+    return { commits: [], statusCode: 400 };
   }
 
   const url = new URL(
@@ -31,16 +31,17 @@ export const fetchCommits = async (
     });
 
     if (!response.ok) {
-      throw new Error(
+      console.log(
         `Request failed with status: ${response.status} and body: ${response.body}`
       );
+      return { commits: [], statusCode: response.status };
     }
 
     const json = await response.json();
-    return CommitListSchema.parse(json);
+    return { commits: CommitListSchema.parse(json), statusCode: 200 };
   } catch (error) {
     console.error("Error fetching commits", error);
-    return [];
+    return { commits: [], statusCode: 500 };
   }
 };
 

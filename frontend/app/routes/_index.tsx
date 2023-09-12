@@ -28,12 +28,13 @@ export async function loader({ request }: LoaderArgs) {
     const urL = new URL(request.url);
     const searchQuery = urL.searchParams.get("search");
 
-    if (!searchQuery) return { commits: null, codeChanged: null };
+    if (!searchQuery)
+      return { commits: null, codeChanged: null, statusCode: 400 };
 
-    const commits = await fetchCommits(searchQuery);
+    const { commits, statusCode } = await fetchCommits(searchQuery);
 
-    if (!commits) {
-      throw new Error("Failed to fetch commits.");
+    if (statusCode !== 200) {
+      return { commits, codeChanged: null, statusCode };
     }
 
     const promises = commits.map((commit) =>
@@ -42,10 +43,9 @@ export async function loader({ request }: LoaderArgs) {
 
     const codeChanged = await Promise.all(promises);
 
-    return { commits, codeChanged };
+    return { commits, codeChanged, statusCode };
   } catch (error) {
-    console.error(error);
-    return { commits: null, codeChanged: null };
+    return { commits: null, codeChanged: null, statusCode: 500 };
   }
 }
 
@@ -58,7 +58,7 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function Index() {
-  const { commits, codeChanged } = useLoaderData<typeof loader>();
+  const { commits, codeChanged, statusCode } = useLoaderData<typeof loader>();
 
   return (
     <Flex direction="column">
@@ -67,30 +67,43 @@ export default function Index() {
         <Form method="post">
           <SearchInput />
         </Form>
-        {!commits ? (
-          <></>
-        ) : !commits?.length ? (
-          <Container mt={200}>
-            <Text align="center">
-              Sorry, the repository could not be found. Please double-check the
-              repository URL and try again
-            </Text>
-          </Container>
-        ) : (
+        {statusCode === 200 ? (
           <Text>
             {
               <ul style={{ listStyleType: "none", padding: 0 }}>
-                {commits.map((commit, index) => (
+                {commits!.map((commit, index) => (
                   <li key={commit.sha || index}>
                     <CommitCard
                       commit={commit}
-                      codeChanged={codeChanged[index] ?? ""}
+                      codeChanged={(codeChanged && codeChanged[index]) ?? ""}
                     />
                   </li>
                 ))}
               </ul>
             }
           </Text>
+        ) : statusCode === 404 || statusCode === 400 ? (
+          <Container mt={200}>
+            <Text align="center">
+              Sorry, the repository could not be found. Please double-check the
+              repository URL and try again
+            </Text>
+          </Container>
+        ) : statusCode === 403 ? (
+          <Container mt={200}>
+            <Text align="center">
+              API rate limit exceeded (But here's the good news: Authenticated
+              requests get a higher rate limit. Check out the documentation for
+              more details.)
+            </Text>
+          </Container>
+        ) : (
+          <Container mt={200}>
+            <Text align="center">
+              You may be using the wrong GITHUB_TOKEN. Please double-check the
+              token and try again
+            </Text>
+          </Container>
         )}
       </Container>
     </Flex>
